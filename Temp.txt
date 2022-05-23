@@ -1,0 +1,689 @@
+#1
+pip install pandas
+-
+import pandas as pd
+#Email Spam Classification Dataset CSV
+url = "emails.csv"
+df = pd.read_csv(url)
+print(df)
+-
+#looking for null values 
+print(df.describe())
+-
+print(df.isnull().values.any())
+-
+#Dimension of the dataframe 
+print("Size", df.size)
+print("Tuple Shape", df.shape)
+print("Dimension", df.ndim)
+-
+#providing variables discriptions
+print(df.head)
+print(df.dtypes)
+print("INFO",df.info())
+-
+df1 = df.copy()
+df1["ect"] = df1["ect"].astype("float64")
+print(df1.head())
+df1.info()
+----
+
+
+
+
+
+#2
+pip install pandas
+-
+import pandas as pd
+#Dataset CSV
+url = "E:\chrome_download/xAPI-Edu-Data.csv"
+df = pd.read_csv(url)
+print(df)
+-
+#print the dimension of dataset
+df.shape
+-
+#check no null value in each column
+print(df.isnull().sum())
+-
+#drop the whole row which having NULL value
+df.dropna(inplace=True)
+print(df.isnull().sum())
+df.shape
+#these changes not reflect with your dataset , only change in curr data frame 
+#as you again read dataset, NULL are there as before
+-
+import pandas as pd
+#Dataset CSV
+url = "E:\chrome_download/xAPI-Edu-Data.csv"
+df = pd.read_csv(url)
+-
+#imputation by mean
+df["cns"]=df["cns"].replace(np.NAN,df["cns"].mean())
+
+print(df["cns"])
+-
+import pandas as pd
+import numpy as np
+#Dataset CSV
+url = "E:\chrome_download/xAPI-Edu-Data.csv"
+df = pd.read_csv(url)
+-
+#imputation by median
+
+df["cns"]=df["cns"].replace(np.NAN,df["cns"].median())
+print(df["cns"])
+-
+
+#Dataset CSV
+url = "E:\chrome_download/xAPI-Edu-Data.csv"
+df = pd.read_csv(url)
+-
+#imputation by median
+
+import statistics
+df["cns"]=df["cns"].replace(np.NAN,statistics.mode(df["cns"]))
+print(df["cns"])
+-
+
+#Dataset CSV
+url = "E:\chrome_download/xAPI-Edu-Data.csv"
+df = pd.read_csv(url)
+-
+#imputation by interpolation -linear
+df["cns"]=df["cns"].interpolate(method='linear',limit_direction='forward',axis=0)
+print(df["cns"])
+-
+#Dataset CSV
+url = "E:\chrome_download/xAPI-Edu-Data.csv"
+df = pd.read_csv(url)
+
+print(df.isnull().sum())
+df.shape
+-
+#replace categorical variable with random value
+df["gender"]=df["gender"].fillna('unknow')
+print(df["gender"])
+-
+#Dataset CSV
+url = "E:\chrome_download/xAPI-Edu-Data.csv"
+df = pd.read_csv(url)
+
+#replace categorical variable with previous value
+df["gender"]=df["gender"].fillna(method='ffill')
+print(df["gender"])
+-
+#so we replace the inconsistent data with NULL value
+cnt=0;
+for row in df["gender"]:
+    try:
+        int(row)
+        df.loc[cnt,"gender"]=np.nan
+    except ValueError:
+        pass
+    cnt+=1
+-
+#so the value with 100 replace by NULL
+print(df["gender"])
+----
+
+
+
+
+
+#3
+pip install pandas
+-
+import pandas as pd
+#Dataset CSV
+url = "E:/xAPI-Edu-Data.csv"
+df = pd.read_csv(url)
+print(df)
+-
+url = "E:/xAPI-Edu-Data.csv"
+df = pd.read_csv(url)
+#Grouping and perform count over each group
+df =  df.groupby('gender')['gender'].count()
+print(df)
+-
+url = "E:/xAPI-Edu-Data.csv"
+df = pd.read_csv(url)
+#Grouping and perform sum over each group
+df =  df.groupby('salary')['salary'].count()
+print(df)
+-
+url = "E:/xAPI-Edu-Data.csv"
+df = pd.read_csv(url)
+#Group by two keys and then summarize each group
+#groupby(['DEPT','GENDER'],as_index=False).SALARY.mean()
+df =  df.groupby(['gender','year_Joining'],as_index=False).salary.count()
+print(df)
+-----
+
+
+
+
+
+#4
+pip install pandas
+-
+pip install matplotlib
+-
+pip install sklearn
+-
+#pip install seaborn
+# Importing Libraries
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+  
+# Importing Data
+from sklearn.datasets import load_boston
+boston = load_boston()
+-
+boston.data.shape
+-
+data = pd.DataFrame(boston.data)
+data.columns = boston.feature_names
+data.head(10)
+-
+# Adding 'Price' (target) column to the data
+boston.target.shape
+-
+data['Price'] = boston.target
+data.head()
+-
+data.describe()
+-
+data.info()
+-
+# Input Data
+x = boston.data
+
+# Output Data
+y = boston.target
+
+
+# splitting data to training and testing dataset.
+
+#from sklearn.cross_validation import train_test_split
+#the submodule cross_validation is renamed and reprecated to model_selection
+from sklearn.model_selection import train_test_split
+
+xtrain, xtest, ytrain, ytest = train_test_split(x, y, test_size =0.2,random_state = 0)
+
+print("xtrain shape : ", xtrain.shape)
+print("xtest shape : ", xtest.shape)
+print("ytrain shape : ", ytrain.shape)
+print("ytest shape : ", ytest.shape)
+-
+# Fitting Multi Linear regression model to training model
+from sklearn.linear_model import LinearRegression
+regressor = LinearRegression()
+regressor.fit(xtrain, ytrain)
+
+# predicting the test set results
+y_pred = regressor.predict(xtest)
+-
+# Plotting Scatter graph to show the prediction
+# results - 'ytrue' value vs 'y_pred' value
+plt.scatter(ytest, y_pred, c = 'green')
+plt.xlabel("Price: in $1000's")
+plt.ylabel("Predicted value")
+plt.title("True value vs predicted value : Linear Regression")
+plt.show()
+-
+# Results of Linear Regression.
+from sklearn.metrics import mean_squared_error
+mse = mean_squared_error(ytest, y_pred)
+print("Mean Square Error : ", mse)
+----
+
+
+
+
+
+#5
+import numpy as np
+import matplotlib.pyplot as plt
+import pandas as pd
+
+dataset = pd.read_csv('Social_Network_Ads.csv')
+dataset.head()
+-
+X = dataset.iloc[:, [2, 3]].values
+y = dataset.iloc[:, 4].values
+
+print(X[:3, :])
+print('-'*15)
+print(y[:3])
+-
+from sklearn.model_selection import train_test_split
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size = 0.25, random_state = 0)
+
+print(X_train[:3])
+print('-'*15)
+print(y_train[:3])
+print('-'*15)
+print(X_test[:3])
+print('-'*15)
+print(y_test[:3])
+-
+from sklearn.preprocessing import StandardScaler
+sc_X = StandardScaler()
+X_train = sc_X.fit_transform(X_train)
+X_test = sc_X.transform(X_test)
+-
+print(X_train[:3])
+print('-'*15)
+print(X_test[:3])
+-
+from sklearn.linear_model import LogisticRegression
+classifier = LogisticRegression(random_state = 0, solver='lbfgs' )
+classifier.fit(X_train, y_train)
+y_pred = classifier.predict(X_test)
+
+print(X_test[:10])
+print('-'*15)
+print(y_pred[:10])
+-
+print(y_pred[:20])
+print(y_test[:20])
+-
+from sklearn.metrics import confusion_matrix
+cm = confusion_matrix(y_test, y_pred)
+print(cm)
+-
+# Visualizing the Training set results
+from matplotlib.colors import ListedColormap
+X_set, y_set = X_train, y_train
+X1, X2 = np.meshgrid(np.arange(start = X_set[:, 0].min() - 1, stop = X_set[:, 0].max() + 1, step = 0.01),
+                     np.arange(start = X_set[:, 1].min() - 1, stop = X_set[:, 1].max() + 1, step = 0.01))
+plt.contourf(X1, X2, classifier.predict(np.array([X1.ravel(), X2.ravel()]).T).reshape(X1.shape),
+             alpha = 0.6, cmap = ListedColormap(('red', 'green')))
+plt.xlim(X1.min(), X1.max())
+plt.ylim(X2.min(), X2.max())
+for i, j in enumerate(np.unique(y_set)):
+    plt.scatter(X_set[y_set == j, 0], X_set[y_set == j, 1],
+                c = ListedColormap(('red', 'green'))(i), label = j)
+plt.title('Logistic Regression (Training set)')
+plt.xlabel('Age')
+plt.ylabel('Estimated Salary')
+plt.legend()
+plt.show()
+-
+# Visualizing the Test set results
+from matplotlib.colors import ListedColormap
+X_set, y_set = X_test, y_test
+X1, X2 = np.meshgrid(np.arange(start = X_set[:, 0].min() - 1, stop = X_set[:, 0].max() + 1, step = 0.01),
+                     np.arange(start = X_set[:, 1].min() - 1, stop = X_set[:, 1].max() + 1, step = 0.01))
+plt.contourf(X1, X2, classifier.predict(np.array([X1.ravel(), X2.ravel()]).T).reshape(X1.shape),
+             alpha = 0.6, cmap = ListedColormap(('red', 'green')))
+plt.xlim(X1.min(), X1.max())
+plt.ylim(X2.min(), X2.max())
+for i, j in enumerate(np.unique(y_set)):
+    plt.scatter(X_set[y_set == j, 0], X_set[y_set == j, 1],
+                c = ListedColormap(('red', 'green'))(i), label = j)
+plt.title('Logistic Regression (Test set)')
+plt.xlabel('Age')
+plt.ylabel('Estimated Salary')
+plt.legend()
+plt.show()
+----
+
+
+
+
+
+#6
+pip install pandas
+-
+pip install matplotlib
+-
+#pip install sklearn
+-
+#pip install seaborn
+-
+#Importing the Libraries
+import numpy as np
+import matplotlib.pyplot as plt
+import pandas as pd
+-
+#Importing the dataset
+dataset = pd.read_csv('https://raw.githubusercontent.com/mk-gurucharan/Classification/master/IrisDataset.csv')
+
+X = dataset.iloc[:,:4].values
+y = dataset['species'].values
+print(dataset)
+-
+# Splitting the dataset into the Training set and Test set
+
+from sklearn.model_selection import train_test_split
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size = 0.2)
+-
+# Feature Scaling
+
+from sklearn.preprocessing import StandardScaler
+sc = StandardScaler()
+X_train = sc.fit_transform(X_train)
+X_test = sc.transform(X_test)
+-
+#Training the Naive Bayes Classification model on the Training Set
+
+from sklearn.naive_bayes import GaussianNB
+classifier = GaussianNB()
+classifier.fit(X_train, y_train)
+-
+#Predicting the Test set results
+y_pred = classifier.predict(X_test) 
+y_pred
+-
+y_pred = classifier.predict(X_test) 
+y_pred
+
+#Comparing the Real Values with Predicted Values
+df = pd.DataFrame({'Real Values':y_test, 'Predicted Values':y_pred})
+df
+-
+y_pred = classifier.predict(X_test) 
+y_pred
+
+#Confusion Matrix and Accuracy
+from sklearn.metrics import confusion_matrix
+cm = confusion_matrix(y_test, y_pred)
+cm
+-
+y_pred = classifier.predict(X_test) 
+y_pred
+from sklearn.metrics import accuracy_score 
+print ("Accuracy : ", accuracy_score(y_test, y_pred))
+-
+y_pred = classifier.predict(X_test) 
+y_pred
+
+from sklearn.metrics import confusion_matrix
+cm = confusion_matrix(y_test, y_pred)
+
+from sklearn.metrics import precision_score
+#precision =precision_score(y_test, y_pred,average='macro')
+print ("precision : ",precision_score(y_test, y_pred,average='macro'))
+-
+y_pred = classifier.predict(X_test) 
+y_pred
+
+from sklearn.metrics import confusion_matrix
+cm = confusion_matrix(y_test, y_pred)
+
+from sklearn.metrics import recall_score
+#precision =precision_score(y_test, y_pred,average='macro')
+print ("recall : ",recall_score(y_test, y_pred,average='macro'))
+----
+
+
+
+
+
+#7
+pip install nltk
+-
+##using NLTK library, we can do lot of text preprocesing
+import nltk
+nltk.download('punkt')
+nltk.download('wordnet')
+nltk.download('omw-1.4')
+nltk.download('averaged_perceptron_tagger')
+-
+#Sentence Tokenization
+#Sentence tokenizer breaks text paragraph into sentences.
+
+from nltk.tokenize import sent_tokenize
+text="""Hello Mr. Smith, how are you doing today? The weather is great, and city is awesome.
+The sky is pinkish-blue. You shouldn't eat cardboard"""
+
+tokenized_text=sent_tokenize(text)
+print(tokenized_text)
+-
+#Word Tokenization
+#Word tokenizer breaks text paragraph into words.
+
+from nltk.tokenize import word_tokenize
+tokenized_word=word_tokenize(text)
+print(tokenized_word)
+-
+#Frequency Distribution
+
+from nltk.probability import FreqDist
+fdist = FreqDist(tokenized_word)
+print(fdist)
+-
+fdist.most_common(2)
+-
+# Frequency Distribution Plot
+import matplotlib.pyplot as plt
+fdist.plot(30,cumulative=False)
+plt.show()
+-
+#Stopwords
+#Stopwords considered as noise in the text. 
+#Text may contain stop words such as is, am, are, this, a, an, the, etc.
+
+from nltk.corpus import stopwords
+stop_words=set(stopwords.words("english"))
+print(stop_words)
+-
+#Removing Stopwords
+#In NLTK for removing stopwords, you need to create a list of stopwords 
+#and filter out your list of tokens from these words.
+
+filtered_sent=[]
+for w in tokenized_word:
+    if w not in stop_words:
+        filtered_sent.append(w)
+print("Tokenized Sentence:",tokenized_word)
+print("Filterd Sentence:",filtered_sent)
+-
+# Stemming
+from nltk.stem import PorterStemmer
+from nltk.tokenize import sent_tokenize, word_tokenize
+
+ps = PorterStemmer()
+
+stemmed_words=[]
+for w in filtered_sent:
+    stemmed_words.append(ps.stem(w))
+
+print("Filtered Sentence:",filtered_sent)
+print("Stemmed Sentence:",stemmed_words)
+-
+#Lexicon Normalization
+#performing stemming and Lemmatization
+
+#nltk.download('wordnet')
+#nltk.download('omw-1.4')
+from nltk.stem.wordnet import WordNetLemmatizer
+lem = WordNetLemmatizer()
+
+from nltk.stem.porter import PorterStemmer
+stem = PorterStemmer()
+
+word = "flying"
+print("Lemmatized Word:",lem.lemmatize(word,"v"))
+print("Stemmed Word:",stem.stem(word))
+-
+#POS Tagging
+
+sent = "Albert Einstein was born in Ulm, Germany in 1879."
+tokens=nltk.word_tokenize(sent)
+print(tokens)
+-
+#nltk.download('averaged_perceptron_tagger')
+nltk.pos_tag(tokens)
+----
+  
+
+
+
+#8
+pip install seaborn
+-
+#Dataset
+import pandas as pd
+import numpy as np
+
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+dataset = sns.load_dataset('titanic')
+
+dataset.head(30)
+-
+#Distributional Plots
+-
+   # 1.The Dist Plot
+-
+sns.distplot(dataset['fare'])
+-
+sns.distplot(dataset['fare'], kde=False)
+-
+sns.distplot(dataset['fare'], kde=False, bins=10)
+-
+   # 2.The Joint Plot
+-
+sns.jointplot(x='age', y='fare', data=dataset)
+-
+sns.jointplot(x='age', y='fare', data=dataset, kind='hex')
+-
+   # 3.Categorical Plots
+-
+sns.barplot(x='sex', y='age', data=dataset)
+-
+import numpy as np
+
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+sns.barplot(x='sex', y='age', data=dataset, estimator=np.std)
+-
+sns.countplot(x='sex', data=dataset)
+-
+   # 4.The Box Plot
+-
+sns.boxplot(x='sex', y='age', data=dataset)
+-
+sns.boxplot(x='sex', y='age', data=dataset, hue="survived")
+-----
+
+
+
+
+#9
+pip install seaborn
+-
+import pandas as pd
+import numpy as np
+
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+dataset = sns.load_dataset('titanic')
+
+dataset.head()
+-
+# Box Plot
+-
+#Now let's plot a box plot that displays the distribution for the age with respect to each gender. 
+#You need to pass the categorical column as the first parameter (which is sex in our case) 
+#and the numeric column (age in our case) as the second parameter. 
+#Finally, the dataset is passed as the third parameter
+-
+sns.boxplot(x='sex', y='age', data=dataset)
+-
+#Let's try to understand the box plot for female. 
+#The first quartile starts at around 5 and ends at 22 which means that 25% of the passengers are aged between 5 and 25. 
+#The second quartile starts at around 23 and ends at around 32 which means that 25% of the passengers are aged between 23 and 32. 
+#Similarly, the third quartile starts and ends between 34 and 42, hence 25% passengers are aged within this range and finally 
+#the fourth or last quartile starts at 43 and ends around 65.
+
+#If there are any outliers or the passengers that do not belong to any of the quartiles, 
+#they are called outliers and are represented by dots on the box plot.
+-
+#You can make your box plots more fancy by adding another layer of distribution. 
+#For instance, if you want to see the box plots of forage of passengers of both genders, 
+#along with the information about whether or not they survived, you can pass the survived 
+#as value to the hue parameter as shown below:
+-
+sns.boxplot(x='sex', y='age', data=dataset, hue="survived")
+----
+
+
+
+
+
+#10
+import pandas as pd
+import numpy as np
+
+url="E:\Iris.csv"
+df = pd.read_csv(url)
+df.head()
+-
+#List down the features and their types 
+#(e.g., numeric, nominal) available in the dataset.
+-
+column = len(list(df))
+column
+#Clearly, dataset has 6 column indicating 6 features about the data
+-
+df.info()
+#Hence the dataset contains 5 numerical columns and 1 object column
+-
+#Data Visualization-Create a histogram for each feature in the dataset to 
+#illustrate the feature distributions. Plot each histogram.
+-
+import seaborn as sns
+import matplotlib
+import matplotlib.pyplot as plt
+%matplotlib inline
+df.head(2)
+-
+fig, axes = plt.subplots(3, 2, figsize=(16, 8))
+
+
+axes[0,0].set_title("Distribution of First Column")
+axes[0,0].hist(df["Id"]);
+
+axes[0,1].set_title("Distribution of Second Column")
+axes[0,1].hist(df["SepalLengthCm"]);
+
+axes[1,0].set_title("Distribution of Third Column")
+axes[1,0].hist(df["SepalWidthCm"]);
+
+axes[1,1].set_title("Distribution of Fourth Column")
+axes[1,1].hist(df["PetalLengthCm"]);
+
+axes[2,0].set_title("Distribution of Fifth Column")
+axes[2,0].hist(df["PetalWidthCm"]);
+
+axes[2,1].set_title("Distribution of Sixth Column")
+axes[2,1].hist(df["Species"]);
+-
+#Create a boxplot for each feature in the dataset. 
+#All of the boxplots should be combined into a single plot. 
+#Compare distributions and identify outliers.
+df.head(2)
+-
+data_to_plot = [df["Id"],df["SepalLengthCm"],df["SepalWidthCm"]
+              ,df["PetalLengthCm"],df["PetalWidthCm"]]
+
+sns.set_style("whitegrid")
+
+# Creating a figure instance
+fig = plt.figure(1, figsize=(12,12))
+
+# Creating an axes instance
+ax = fig.add_subplot(111)
+
+# Creating the boxplot
+bp = ax.boxplot(data_to_plot);
+----
