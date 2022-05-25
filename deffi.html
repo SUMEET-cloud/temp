@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<head>
+    <meta charset="utf-8">
+    <title>Deffie Hellman</title>
+</head>
+
+<body>
+    <input type="text" placeholder="Enter your private key" id="myInput">
+    <button type="button" onclick="solve();">Get Value</button>
+
+    <script>
+
+
+        // Driver code
+        function solve() {
+
+
+
+            // This program calculates the Key for two persons
+            // using the Diffie-Hellman Key exchange algorithm
+
+            // Power function to return value of a ^ b mod P
+            function power(a, b, p) {
+                if (b == 1)
+                    return a;
+                else
+                    return ((Math.pow(a, b)) % p);
+            }
+            var P, G, x, a, y, b, ka, kb;
+
+            
+            // Alice will choose the private key a
+            // a is the chosen private key
+            a = document.getElementById("myInput").value;
+            // A prime number P is taken
+    
+
+            // Both the persons will be agreed upon the
+            // public keys G and P
+            P = 23;
+            document.write("The value of P:" + P + "<br>");
+
+            // A primitive root for P, G is taken
+            G = 9;
+            document.write("The value of G:" + G + "<br>");
+
+           
+
+            document.write("The private key a for Alice:" +
+                a + "<br>");
+
+            // Gets the generated key
+            x = power(G, a, P);
+
+            // Bob will choose the private key b
+            // b is the chosen private key
+            b = 3;
+            document.write("The private key b for Bob:" +
+                b + "<br>");
+
+            // Gets the generated key
+            y = power(G, b, P);
+
+            // Generating the secret key after the exchange
+            // of keys
+            ka = power(y, a, P); // Secret key for Alice
+            kb = power(x, b, P); // Secret key for Bob
+
+            document.write("Secret key for the Alice is:" +
+                ka + "<br>");
+            document.write("Secret key for the Bob is:" +
+                kb + "<br>");
+
+            
+        }
+
+
+    </script>
+</body>
+
+</html>
